@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glazeworks Admin Login</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #2d1b2e 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            padding: 20px;
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+        
+        .title {
+            color: white;
+            font-size: 1.75rem;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        input[type="password"] {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #FFB09D;
+            box-shadow: 0 0 0 3px rgba(255, 176, 157, 0.2);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 15px;
+            border: none;
+            background: linear-gradient(135deg, #FFB09D, #FF8A75);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 138, 117, 0.3);
+        }
+        
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .note {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(255, 176, 157, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 176, 157, 0.2);
+        }
+        
+        .note p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 5px 0;
+            font-size: 0.85rem;
+        }
+        
+        .note strong {
+            color: white;
+        }
+        
+        .back-link {
+            display: block;
+            margin-top: 25px;
+            color: #FFB09D;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .error {
+            color: #ff6b6b;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo">🥐</div>
+            <h1 class="title">Glazeworks Admin</h1>
+            <p class="subtitle">Manage menu items, prices, and content</p>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="password" 
+                           id="password" 
+                           placeholder="Enter admin password" 
+                           required>
+                </div>
+                
+                <button type="submit" class="login-btn" id="loginButton">
+                    <span>🔐</span>
+                    <span>Access Dashboard</span>
+                </button>
+                
+                <div class="error" id="errorMessage"></div>
+                
+                <div class="note">
+                    <p><strong>⚠️ Admin Access Only</strong></p>
+                    <p>Contact owner for password</p>
+                </div>
+                
+                <a href="../index.html" class="back-link">← Back to Main Site</a>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        const form = document.getElementById('loginForm');
+        const passwordInput = document.getElementById('password');
+        const loginButton = document.getElementById('loginButton');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const password = passwordInput.value.trim();
+            
+            // Show loading state
+            loginButton.innerHTML = '<span>⏳</span><span>Checking...</span>';
+            loginButton.disabled = true;
+            errorMessage.style.display = 'none';
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Store token and redirect
+                    localStorage.setItem('adminToken', data.token);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    throw new Error(data.message || 'Invalid password');
+                }
+            } catch (error) {
+                // Show error
+                errorMessage.textContent = '❌ ' + error.message;
+                errorMessage.style.display = 'block';
+                
+                // Reset button
+                loginButton.innerHTML = '<span>🔐</span><span>Access Dashboard</span>';
+                loginButton.disabled = false;
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+        
+        // Check if already logged in
+        if (localStorage.getItem('adminToken')) {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

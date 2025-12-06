@@ -285,3 +285,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 300);
     }, 500);
 });
+// Update just the drinks loading part:
+if (drinksGrid) {
+    drinksGrid.innerHTML = drinks.map(drink => `
+        <div class="drink-item has-hover">
+            <div class="drink-info">
+                <h4 class="drink-name">${drink.name}</h4>
+                <p class="drink-description">${drink.description || 'Premium quality beverage'}</p>
+            </div>
+            <div class="drink-price">${drink.price}</div>
+        </div>
+    `).join('');
+    
+    // Force reflow to trigger animations
+    setTimeout(() => {
+        drinksGrid.style.display = 'none';
+        void drinksGrid.offsetWidth;
+        drinksGrid.style.display = '';
+    }, 10);
+}

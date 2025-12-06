@@ -142,3 +142,206 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+// Load products from your API
+async function loadLiveProducts() {
+    try {
+        const response = await fetch('http://localhost:5000/api/menu-items');
+        const items = await response.json();
+        
+        // Separate pastries and drinks
+        const pastries = items.filter(item => item.type === 'pastry');
+        const drinks = items.filter(item => item.type === 'drink');
+        
+        // Update signature collection tab
+        const productsGrid = document.querySelector('.products-grid');
+        if (productsGrid) {
+            productsGrid.innerHTML = pastries.map(pastry => `
+                <div class="product-card" style="opacity: 0; animation: fadeIn 0.5s ease forwards;">
+                    <div class="product-image">
+                        <img src="${pastry.image}" alt="${pastry.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${pastry.name}</h3>
+                        <p class="product-description">${pastry.description}</p>
+                        <div class="product-price">${pastry.price}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Update drinks tab - ADD INLINE STYLES TO FORCE ANIMATIONS
+        const drinksGrid = document.querySelector('.drinks-grid');
+        if (drinksGrid) {
+            drinksGrid.innerHTML = drinks.map((drink, index) => `
+                <div class="drink-item" 
+                     style="opacity: 0; 
+                            transform: translateY(20px); 
+                            animation: fadeInUp 0.5s ease ${index * 0.05}s forwards;
+                            transition: all 0.3s ease !important;">
+                    <div class="drink-info">
+                        <h4 class="drink-name">${drink.name}</h4>
+                        <p class="drink-description">${drink.description || 'Premium quality beverage'}</p>
+                    </div>
+                    <div class="drink-price">${drink.price}</div>
+                </div>
+            `).join('');
+        }
+        
+    } catch (error) {
+        console.log('Using fallback data (API not available)');
+        // Fallback to hardcoded data
+    }
+}
+
+// Add these animation keyframes
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+`;
+document.head.appendChild(style);
+
+// Load on page load
+document.addEventListener('DOMContentLoaded', loadLiveProducts);
+
+
+
+
+////////
+
+
+
+
+
+window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Load products from your API - ADD THIS FUNCTION
+        async function loadLiveProducts() {
+            try {
+                const response = await fetch('http://localhost:5000/api/menu-items');
+                const items = await response.json();
+                
+                // Separate pastries and drinks
+                const pastries = items.filter(item => item.type === 'pastry');
+                const drinks = items.filter(item => item.type === 'drink');
+                
+                // Update signature collection tab
+                const productsGrid = document.querySelector('.products-grid');
+                if (productsGrid) {
+                    productsGrid.innerHTML = pastries.map(pastry => `
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="${pastry.image}" alt="${pastry.name}">
+                            </div>
+                            <div class="product-info">
+                                <h3 class="product-name">${pastry.name}</h3>
+                                <p class="product-description">${pastry.description}</p>
+                                <div class="product-price">${pastry.price}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                
+                // Update drinks tab
+                const drinksGrid = document.querySelector('.drinks-grid');
+                if (drinksGrid) {
+                    drinksGrid.innerHTML = drinks.map(drink => `
+                        <div class="drink-item">
+                            <div class="drink-info">
+                                <h4 class="drink-name">${drink.name}</h4>
+                                <p class="drink-description">${drink.description || 'Premium quality beverage'}</p>
+                            </div>
+                            <div class="drink-price">${drink.price}</div>
+                        </div>
+                    `).join('');
+                }
+                
+            } catch (error) {
+                console.log('Using fallback data (API not available)');
+                // Fallback to hardcoded data
+            }
+        }
+
+        // Load on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        loadLiveProducts();
+        // Re-run animations after a longer delay to be safe
+        setTimeout(reinitializeAnimations, 500);
+        });
+        // Force CSS animation restart
+        const drinksGrid = document.querySelector('.drinks-grid');
+        if (drinksGrid) {
+            drinksGrid.style.animation = 'none';
+            void drinksGrid.offsetWidth; // Trigger reflow
+            drinksGrid.style.animation = null;
+        }
+    
+
+// Modified load function with animation fix
+async function loadLiveProducts() {
+    try {
+        const response = await fetch('http://localhost:5000/api/menu-items');
+        const items = await response.json();
+        
+        // Separate pastries and drinks
+        const pastries = items.filter(item => item.type === 'pastry');
+        const drinks = items.filter(item => item.type === 'drink');
+        
+        // Update signature collection tab
+        const productsGrid = document.querySelector('.products-grid');
+        if (productsGrid) {
+            productsGrid.innerHTML = pastries.map(pastry => `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${pastry.image}" alt="${pastry.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${pastry.name}</h3>
+                        <p class="product-description">${pastry.description}</p>
+                        <div class="product-price">${pastry.price}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Update drinks tab
+        const drinksGrid = document.querySelector('.drinks-grid');
+        if (drinksGrid) {
+            drinksGrid.innerHTML = drinks.map(drink => `
+                <div class="drink-item">
+                    <div class="drink-info">
+                        <h4 class="drink-name">${drink.name}</h4>
+                        <p class="drink-description">${drink.description || 'Premium quality beverage'}</p>
+                    </div>
+                    <div class="drink-price">${drink.price}</div>
+                </div>
+            `).join('');
+            
+            // FIX: Add a small delay to ensure CSS is applied
+            setTimeout(() => {
+                reinitializeAnimations();
+            }, 100);
+        }
+        
+    } catch (error) {
+        console.log('Using fallback data (API not available)');
+        // Fallback to hardcoded data
+    }
+}

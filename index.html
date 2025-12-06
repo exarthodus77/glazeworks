@@ -75,70 +75,7 @@
         <div class="horizontal-scroll-container">
             <div class="scroll-arrow left">←</div>
             <div class="horizontal-scroll">
-                <div class="scroll-item">
-                    <div class="image-container">
-                        <img src="https://www.corriecooks.com/wp-content/uploads/2025/04/Honey-Butter-Croissants-500x500.jpg" 
-                             alt="Honey Butter Croissant">
-                    </div>
-                    <h3>Honey Butter Croissant</h3>
-                    <p>27 delicate layers of French butter</p>
-                </div>
-                <div class="scroll-item">
-                    <div class="image-container">
-                        <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=400&h=400&fit=crop&q=90" 
-                             alt="Vanilla Bean Éclair">
-                    </div>
-                    <h3>Vanilla Bean Éclair</h3>
-                    <p>Madagascar vanilla pastry cream</p>
-                </div>
-                <div class="scroll-item">
-                    <div class="image-container">
-                        <img src="https://www.sweetandsavorybyshinee.com/wp-content/uploads/2022/08/Raspberry-Macarons-1-1024x1536.jpg" 
-                             alt="Raspberry Macaron">
-                    </div>
-                    <h3>Raspberry Macaron</h3>
-                    <p>Fresh berry filling, almond shell</p>
-                </div>
-                <div class="scroll-item">
-                    <div class="image-container">
-                        <img src="https://zestfulkitchen.com/wp-content/uploads/2020/03/classic-lemon-tart-_-for-web-_-cover-736x809.jpg" 
-                             alt="Lemon Tart">
-                    </div>
-                    <h3>Lemon Tart</h3>
-                    <p>Zesty citrus cream, buttery crust</p>
-                </div>
-                <div class="scroll-item">
-                    <div class="image-container">
-                        <img src="https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?w=400&h=400&fit=crop&q=90" 
-                             alt="Chocolate Twist">
-                    </div>
-                    <h3>Chocolate Twist</h3>
-                    <p>Dark chocolate spiral, sea salt</p>
-                </div>
-                <div class="scroll-item">
-                    <div class="image-container">
-                        <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=400&fit=crop&q=90" 
-                             alt="Almond Brioche">
-                    </div>
-                    <h3>Almond Brioche</h3>
-                    <p>Toasted almond, orange blossom</p>
-                </div>
-                <div class="scroll-item">
-                    <div class="image-container">
-                        <img src="https://images.unsplash.com/photo-1488477304112-4944851de03d?w=400&h=400&fit=crop&q=90" 
-                             alt="Pain au Chocolat">
-                    </div>
-                    <h3>Pain au Chocolat</h3>
-                    <p>Double chocolate batons</p>
-                </div>
-                <div class="scroll-item">
-                    <div class="image-container">
-                        <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=400&h=400&fit=crop&q=90" 
-                             alt="Matcha Roll">
-                    </div>
-                    <h3>Matcha Roll</h3>
-                    <p>Ceremonial matcha, red bean</p>
-                </div>
+                <!-- Dynamic content will be loaded here -->
             </div>
             <div class="scroll-arrow right">→</div>
         </div>
@@ -168,46 +105,7 @@
             <h2>Coffee & Tea</h2>
             <div class="scrollable-menu">
                 <div class="menu-items">
-                    <div class="menu-item">
-                        <span class="item-name">Espresso</span>
-                        <span class="item-price">$3.50</span>
-                    </div>
-                    <div class="menu-item">
-                        <span class="item-name">Pour Over</span>
-                        <span class="item-price">$4.50</span>
-                    </div>
-                    <div class="menu-item">
-                        <span class="item-name">Cappuccino</span>
-                        <span class="item-price">$4.25</span>
-                    </div>
-                    <div class="menu-item">
-                        <span class="item-name">Latte</span>
-                        <span class="item-price">$4.75</span>
-                    </div>
-                    <div class="menu-item">
-                        <span class="item-name">Matcha Latte</span>
-                        <span class="item-price">$5.25</span>
-                    </div>
-                    <div class="menu-item">
-                        <span class="item-name">Chai Tea</span>
-                        <span class="item-price">$4.75</span>
-                    </div>
-                    <div class="menu-item">
-                        <span class="item-name">Cold Brew</span>
-                        <span class="item-price">$5.50</span>
-                    </div>
-                    <div class="menu-item">
-                        <span class="item-name">Herbal Infusion</span>
-                        <span class="item-price">$4.00</span>
-                    </div>
-                    <div class="menu-item">
-                        <span class="item-name">Hot Chocolate</span>
-                        <span class="item-price">$4.50</span>
-                    </div>
-                    <div class="menu-item">
-                        <span class="item-name">Turkish Coffee</span>
-                        <span class="item-price">$4.75</span>
-                    </div>
+                    <!-- Dynamic content will be loaded here -->
                 </div>
             </div>
         </div>
@@ -259,6 +157,170 @@
                 document.body.style.opacity = '1';
             }, 100);
         });
+
+        // Load menu from your API
+        async function loadLiveMenu() {
+            try {
+                const response = await fetch('http://localhost:5000/api/menu-items');
+                const items = await response.json();
+                
+                // Separate pastries and drinks
+                const pastries = items.filter(item => item.type === 'pastry');
+                const drinks = items.filter(item => item.type === 'drink');
+                
+                // Update signature collection on homepage
+                const scrollContainer = document.querySelector('.horizontal-scroll');
+                if (scrollContainer) {
+                    scrollContainer.innerHTML = pastries.map(pastry => `
+                        <div class="scroll-item">
+                            <div class="image-container">
+                                <img src="${pastry.image}" alt="${pastry.name}">
+                            </div>
+                            <h3>${pastry.name}</h3>
+                            <p>${pastry.description}</p>
+                        </div>
+                    `).join('');
+                }
+                
+                // Update drinks menu
+                const menuItems = document.querySelector('.menu-items');
+                if (menuItems) {
+                    menuItems.innerHTML = drinks.map(drink => `
+                        <div class="menu-item">
+                            <span class="item-name">${drink.name}</span>
+                            <span class="item-price">${drink.price}</span>
+                        </div>
+                    `).join('');
+                }
+                
+            } catch (error) {
+                console.log('Using fallback data (API not available)');
+                // Fallback to hardcoded data
+                loadFallbackData();
+            }
+        }
+
+        // Fallback data function
+        function loadFallbackData() {
+            const scrollContainer = document.querySelector('.horizontal-scroll');
+            if (scrollContainer && scrollContainer.innerHTML === '') {
+                scrollContainer.innerHTML = `
+                    <div class="scroll-item">
+                        <div class="image-container">
+                            <img src="https://www.corriecooks.com/wp-content/uploads/2025/04/Honey-Butter-Croissants-500x500.jpg" 
+                                 alt="Honey Butter Croissant">
+                        </div>
+                        <h3>Honey Butter Croissant</h3>
+                        <p>27 delicate layers of French butter</p>
+                    </div>
+                    <div class="scroll-item">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=400&h=400&fit=crop&q=90" 
+                                 alt="Vanilla Bean Éclair">
+                        </div>
+                        <h3>Vanilla Bean Éclair</h3>
+                        <p>Madagascar vanilla pastry cream</p>
+                    </div>
+                    <div class="scroll-item">
+                        <div class="image-container">
+                            <img src="https://www.sweetandsavorybyshinee.com/wp-content/uploads/2022/08/Raspberry-Macarons-1-1024x1536.jpg" 
+                                 alt="Raspberry Macaron">
+                        </div>
+                        <h3>Raspberry Macaron</h3>
+                        <p>Fresh berry filling, almond shell</p>
+                    </div>
+                    <div class="scroll-item">
+                        <div class="image-container">
+                            <img src="https://zestfulkitchen.com/wp-content/uploads/2020/03/classic-lemon-tart-_-for-web-_-cover-736x809.jpg" 
+                                 alt="Lemon Tart">
+                        </div>
+                        <h3>Lemon Tart</h3>
+                        <p>Zesty citrus cream, buttery crust</p>
+                    </div>
+                    <div class="scroll-item">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?w=400&h=400&fit=crop&q=90" 
+                                 alt="Chocolate Twist">
+                        </div>
+                        <h3>Chocolate Twist</h3>
+                        <p>Dark chocolate spiral, sea salt</p>
+                    </div>
+                    <div class="scroll-item">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=400&fit=crop&q=90" 
+                                 alt="Almond Brioche">
+                        </div>
+                        <h3>Almond Brioche</h3>
+                        <p>Toasted almond, orange blossom</p>
+                    </div>
+                    <div class="scroll-item">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1488477304112-4944851de03d?w=400&h=400&fit=crop&q=90" 
+                                 alt="Pain au Chocolat">
+                        </div>
+                        <h3>Pain au Chocolat</h3>
+                        <p>Double chocolate batons</p>
+                    </div>
+                    <div class="scroll-item">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=400&h=400&fit=crop&q=90" 
+                                 alt="Matcha Roll">
+                        </div>
+                        <h3>Matcha Roll</h3>
+                        <p>Ceremonial matcha, red bean</p>
+                    </div>
+                `;
+            }
+
+            const menuItems = document.querySelector('.menu-items');
+            if (menuItems && menuItems.innerHTML === '') {
+                menuItems.innerHTML = `
+                    <div class="menu-item">
+                        <span class="item-name">Espresso</span>
+                        <span class="item-price">$3.50</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="item-name">Pour Over</span>
+                        <span class="item-price">$4.50</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="item-name">Cappuccino</span>
+                        <span class="item-price">$4.25</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="item-name">Latte</span>
+                        <span class="item-price">$4.75</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="item-name">Matcha Latte</span>
+                        <span class="item-price">$5.25</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="item-name">Chai Tea</span>
+                        <span class="item-price">$4.75</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="item-name">Cold Brew</span>
+                        <span class="item-price">$5.50</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="item-name">Herbal Infusion</span>
+                        <span class="item-price">$4.00</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="item-name">Hot Chocolate</span>
+                        <span class="item-price">$4.50</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="item-name">Turkish Coffee</span>
+                        <span class="item-price">$4.75</span>
+                    </div>
+                `;
+            }
+        }
+
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', loadLiveMenu);
     </script>
 </body>
 </html>
